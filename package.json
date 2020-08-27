@@ -1,0 +1,45 @@
+{
+  "name": "FuWa",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@ant-design/icons-react-native": "^2.2.1",
+    "@ant-design/react-native": "^4.0.5",
+    "@react-native-community/masked-view": "^0.1.10",
+    "@react-navigation/native": "^5.7.3",
+    "@react-navigation/stack": "^5.9.0",
+    "babel-plugin-import": "^1.13.0",
+    "native-echarts": "^0.5.0",
+    "react": "16.13.1",
+    "react-native": "0.63.2",
+    "react-native-camera": "^3.36.0",
+    "react-native-gesture-handler": "^1.7.0",
+    "react-native-reanimated": "^1.13.0",
+    "react-native-safe-area-context": "^3.1.6",
+    "react-native-screens": "^2.10.1",
+    "react-native-shadow": "^1.2.2",
+    "react-native-svg": "^12.1.0",
+    "react-native-vector-icons": "^7.0.0",
+    "react-native-webview": "^10.7.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.1",
+    "@babel/runtime": "^7.11.2",
+    "@react-native-community/eslint-config": "^2.0.0",
+    "babel-jest": "^26.3.0",
+    "eslint": "^7.7.0",
+    "jest": "^26.4.0",
+    "metro-react-native-babel-preset": "^0.62.0",
+    "react-test-renderer": "16.13.1"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
