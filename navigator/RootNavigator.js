@@ -23,7 +23,7 @@ export default class RootNavigator extends React.Component {
     return (
       <NavigationContainer>
         {/* 初始页面 */}
-        <Stack.Navigator initialRouteName="LicensePlate">
+        <Stack.Navigator initialRouteName="Home">
           <>
             {/* 加入要路由的组件 */}
             <Stack.Screen
