@@ -4,9 +4,16 @@
  * @Date: 2020-08-24 15:55:21
  */
 import React from 'react';
-import {Text, View, StyleSheet, Animated, Easing} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Animated,
+  Easing,
+  Dimensions,
+} from 'react-native';
 import RadioBox from '../../components/RadioBox';
-// import AreaPicker from '../../components/AreaPicker';
+import AreaPicker from '../../components/AreaPicker';
 import {
   TouchableOpacity,
   TextInput,
@@ -15,45 +22,8 @@ import {
 
 export default class LicensePlate extends React.Component {
   state = {
-    areaData: [
-      '京',
-      '津',
-      '冀',
-      '晋',
-      '蒙',
-      '辽',
-      '吉',
-      '黑',
-      '沪',
-      '苏',
-      '浙',
-      '皖',
-      '闽',
-      '赣',
-      '鲁',
-      '豫',
-      '鄂',
-      '湘',
-      '粤',
-      '桂',
-      '琼',
-      '渝',
-      '川',
-      '黔',
-      '滇',
-      '藏',
-      '陕',
-      '甘',
-      '青',
-      '宁',
-      '新',
-      '台',
-      '港',
-      '澳',
-    ],
-    areaCardOrinPotions: new Animated.Value(-450),
-    areaCardIsOpen: false,
     curreSelectArea: '京',
+    visible: false,
   };
   // 单选框选中方法
   selectd = (status) => {
@@ -62,61 +32,35 @@ export default class LicensePlate extends React.Component {
 
   //   切换地域卡
   toggleAreaCard = () => {
-    if (!this.state.areaCardIsOpen) {
-      this.areaCardUpAnimation().start(() => {
-        this.setState({
-          areaCardIsOpen: true,
-        });
-      });
-    } else {
-      this.areaCardDownAnimation().start(() => {
-        this.setState({
-          areaCardIsOpen: false,
-        });
-      });
-    }
-  };
-
-  //   地域卡向上运动动画
-  areaCardUpAnimation = () => {
-    return Animated.timing(this.state.areaCardOrinPotions, {
-      toValue: 0,
-      duration: 400,
-      useNativeDriver: false,
-      easing: Easing.linear,
+    this.setState({
+      visible: !this.state.visible,
     });
   };
 
-  //   向下运动
-  areaCardDownAnimation = () => {
-    return Animated.timing(this.state.areaCardOrinPotions, {
-      toValue: -450,
-      duration: 400,
-      useNativeDriver: false,
-      easing: Easing.linear,
+  //  选中方法
+  selectedResult = (val) => {
+    this.setState({
+      curreSelectArea: val,
+      visible: false,
     });
   };
+  // 确认操作
+  comfire = () => {
+    console.log('111');
+    this.props.navigation.navigate('Result');
+  };
 
-  //   下面卡片选中方法
-  selected = (val) => {
-    console.log(val);
-    this.setState(
-      {
-        curreSelectArea: val,
-      },
-      () => {
-        this.areaCardDownAnimation().start(() => {
-          this.setState({
-            areaCardIsOpen: false,
-          });
-        });
-      },
-    );
+  // 取消操作
+  cancel = () => {
+    this.props.navigation.navigate('Result');
   };
   render() {
+    const width = Dimensions.get('window').width;
     const areaData = this.state.areaData;
     return (
-      <View style={{flex: 1, position: 'relative'}}>
+      <View style={{flex: 1}}>
+        {/* 地域选择器 */}
+        <AreaPicker visible={this.state.visible} change={this.selectedResult} />
         <View style={styles.topCard}>
           <View style={styles.checkBoxWrap}>
             <Text style={{fontSize: 13, color: 'rgba(0,0,0,0.7)'}}>
@@ -159,33 +103,6 @@ export default class LicensePlate extends React.Component {
               }}></TextInput>
           </View>
         </View>
-        {/* 这是下面的地域卡，循环出来，加上动画 */}
-        <Animated.View
-          style={[
-            styles.areaCard,
-            {
-              bottom: this.state.areaCardOrinPotions,
-            },
-          ]}>
-          {areaData.map((item, index) => {
-            return (
-              <TouchableOpacity
-                style={styles.oneLittleleCard}
-                key={index}
-                onPress={this.selected.bind(this, item)}>
-                <Text
-                  style={{
-                    color: '#fff',
-                    fontFamily: 'sans-serif',
-                    fontSize: 18,
-                  }}>
-                  {item}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </Animated.View>
-
         {/* 中间表格 */}
 
         <View style={styles.middleTabl}>
@@ -276,6 +193,30 @@ export default class LicensePlate extends React.Component {
         </View>
 
         {/* 底部按钮 */}
+        <View style={styles.bottomButton}>
+          <TouchableOpacity
+            onPress={this.comfire}
+            style={{
+              height: 50,
+              backgroundColor: 'rgb(2,126,126)',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: width / 2,
+            }}>
+            <Text style={{color: '#fff'}}>确认</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={this.cancel}
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: 50,
+              width: width / 2,
+            }}>
+            <Text>取消</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -326,6 +267,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     flexDirection: 'row',
     flexWrap: 'wrap',
+    zIndex: 999,
   },
   oneLittleleCard: {
     height: 60,
@@ -366,5 +308,16 @@ const styles = StyleSheet.create({
     height: 40,
     borderBottomWidth: 0.6,
     borderColor: 'rgb(2,126,126)',
+  },
+  bottomButton: {
+    position: 'absolute',
+    bottom: 0,
+    // left: 0,
+    flex: 1,
+    flexDirection: 'row',
+    // justifyContent: 'flex-start',
+    width: '100%',
+    backgroundColor: '#fff',
+    height: 50,
   },
 });

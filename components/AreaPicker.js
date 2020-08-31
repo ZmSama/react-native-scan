@@ -1,11 +1,18 @@
 /*
- * @Description:地域选择器（暂时没有实现）
+ * @Description:地域选择器,使用时visible属性是关系卡片显示和隐藏的，change回调函数是获取结果的
  * @Autor: ZmSama
  * @Date: 2020-08-27 15:11:45
  */
 import React from 'react';
 
-import {View, StyleSheet, Text, Animated, Easing} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Animated,
+  Easing,
+  Dimensions,
+} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export default class AreaPicker extends React.Component {
@@ -51,22 +58,15 @@ export default class AreaPicker extends React.Component {
     curreSelectArea: '京',
   };
 
-  //   切换地域卡
-  toggleAreaCard = () => {
-    if (!this.state.areaCardIsOpen) {
-      this.areaCardUpAnimation().start(() => {
-        this.setState({
-          areaCardIsOpen: true,
-        });
-      });
+  componentDidUpdate() {
+    console.log(this.props.visible);
+
+    if (this.props.visible) {
+      this.areaCardUpAnimation().start();
     } else {
-      this.areaCardDownAnimation().start(() => {
-        this.setState({
-          areaCardIsOpen: false,
-        });
-      });
+      this.areaCardDownAnimation().start();
     }
-  };
+  }
 
   //   地域卡向上运动动画
   areaCardUpAnimation = () => {
@@ -90,63 +90,43 @@ export default class AreaPicker extends React.Component {
 
   //   下面卡片选中方法
   selected = (val) => {
-    console.log(val);
-    this.setState(
-      {
-        curreSelectArea: val,
-      },
-      () => {
-        this.areaCardDownAnimation().start(() => {
-          this.setState({
-            areaCardIsOpen: false,
-          });
-        });
-      },
-    );
+    // this.areaCardDownAnimation().start();
+    this.props.change(val);
   };
   render() {
     const areaData = this.state.areaData;
     return (
-      <View style={styles.pickerWrap}>
-        {/* 这是下面的地域卡，循环出来，加上动画 */}
-        <Animated.View
-          style={[
-            styles.areaCard,
-            {
-              bottom: this.state.areaCardOrinPotions,
-            },
-          ]}>
-          {areaData.map((item, index) => {
-            return (
-              <TouchableOpacity
-                style={styles.oneLittleleCard}
-                key={index}
-                onPress={this.selected.bind(this, item)}>
-                <Text
-                  style={{
-                    color: '#fff',
-                    fontFamily: 'sans-serif',
-                    fontSize: 18,
-                  }}>
-                  {item}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </Animated.View>
-      </View>
+      <Animated.View
+        style={[
+          styles.areaCard,
+          {
+            bottom: this.state.areaCardOrinPotions,
+          },
+        ]}>
+        {areaData.map((item, index) => {
+          return (
+            <TouchableOpacity
+              style={styles.oneLittleleCard}
+              key={index}
+              onPress={this.selected.bind(this, item)}>
+              <Text
+                style={{
+                  color: '#fff',
+                  fontFamily: 'sans-serif',
+                  fontSize: 18,
+                }}>
+                {item}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+      </Animated.View>
     );
   }
 }
-
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 const styles = StyleSheet.create({
-  pickerWrap: {
-    flex: 1,
-    position: 'absolute',
-    bottom: -450,
-    left: 0,
-    zIndex: 99,
-  },
   outTengle: {
     height: 30,
     width: 30,
@@ -169,6 +149,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     flexDirection: 'row',
     flexWrap: 'wrap',
+    zIndex: 999,
   },
   oneLittleleCard: {
     height: 60,

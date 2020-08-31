@@ -208,23 +208,6 @@ export default class Result extends React.Component {
             }}>
             <Text>取消</Text>
           </TouchableOpacity>
-          {/* <Button
-            onPress={this.confirm}
-            style={{
-              flex: 1,
-              borderRadius: 0,
-              height: '100%',
-              borderWidth: 0,
-              backgroundColor: 'rgb(1,128,128)',
-            }}>
-            <Text style={{color: '#fff'}}>确认</Text>
-          </Button> */}
-
-          {/* <Button
-            onPress={this.cancel}
-            style={{flex: 1, borderRadius: 0, height: '100%', borderWidth: 0}}>
-            取消
-          </Button> */}
         </View>
       </View>
     );
